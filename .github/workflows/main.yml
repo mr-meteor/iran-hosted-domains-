@@ -32,7 +32,6 @@ jobs:
           
 
       - name: Build .dat file
-        if: ${{ env.SHOULD_UPDATE }}
         run: |
           git clone https://github.com/v2fly/domain-list-community
           rm -rf domain-list-community/data/*
