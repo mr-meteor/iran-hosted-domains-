@@ -14,7 +14,8 @@ jobs:
   crawl:
     name: Crawl Domains
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
 
@@ -95,10 +96,8 @@ jobs:
           done
 
       - name: Upload result as release
-        if: ${{ env.SHOULD_UPDATE }}
         uses: ncipollo/release-action@v1
         with:
-          permissions: write-all
           artifacts: "output/*.*"
           body: "${{ env.TOTAL_DOMAINS }} Domains"
           token: ${{ secrets.GITHUB_TOKEN }}
