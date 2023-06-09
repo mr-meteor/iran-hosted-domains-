@@ -35,31 +35,6 @@ jobs:
           echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           echo "RELEASE_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
           
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          sudo apt update
-          sudo apt install libxml2-dev libxslt-dev -y
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Run python program
-        run: |
-          python src/main.py
-
-      - name: Check result files
-        run: |
-          total=$(wc -l output/domains.txt | awk 'END {print $1}')
-          old=$(curl -sSL --connect-timeout 5 -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/bootmortis/iran-hosted-domains/releases/latest | grep "body" | cut -d\" -f4 | cut -d " " -f1)          
-
-          echo "total $total"
-          echo "old $old"
-
-          if [[ ${{ github.event.inputs.force_update || 'false' }} == 'true' || $total -ne $old ]]; then
-            echo "SHOULD_UPDATE=true" >> $GITHUB_ENV
-            echo "Should Update"
-          fi
-
-          echo "TOTAL_DOMAINS=$total" >> $GITHUB_ENV
 
       - name: Build .dat file
         if: ${{ env.SHOULD_UPDATE }}
@@ -71,7 +46,7 @@ jobs:
           cd domain-list-community
           go run ./ --outputdir=../output
           cd ../output
-          mv dlc.dat iran.dat
+          mv dlc.dat my.dat
 
 
       - name: Upload result as release
