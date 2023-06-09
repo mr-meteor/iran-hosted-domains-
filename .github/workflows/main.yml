@@ -36,7 +36,7 @@ jobs:
           git clone https://github.com/v2fly/domain-list-community
           rm -rf domain-list-community/data/*
           
-          mv output/ir_domains.txt domain-list-community/data/arv
+          mv src/output/ir_domains.txt domain-list-community/data/arv
           cd domain-list-community
           go run ./ --outputdir=../output
           cd ../output
